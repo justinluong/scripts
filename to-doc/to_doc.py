@@ -16,27 +16,6 @@ import nbformat
 import pathspec
 import typer
 
-EXCLUDE_PATTERNS = [
-    "*.ipynb",
-    ".git",
-    ".mypy_cache",
-    ".pytest_cache",
-    "__pycache__",
-    "venv",
-    ".venv",
-    "node_modules",
-    ".vscode",
-    ".venv",
-    ".env",
-    ".ruff_cache",
-    "uv.lock",
-    "*-llm.txt",
-    ".nx",
-    "*.py.lock",
-    "package-lock.json",
-]
-
-
 @dataclass(order=True)
 class FileInfo:
     line_count: int
@@ -52,42 +31,26 @@ def get_default_output_path(root_dir: Path) -> Path:
     return root_dir / f"{root_dir.resolve().name}-llm.txt"
 
 
-def clean_notebook_content(content: str) -> str:
-    """Clean notebook content by removing cell outputs and execution counts."""
-    try:
-        nb = nbformat.reads(content, as_version=4)
-        for cell in nb.cells:
-            # Remove cell outputs
-            if "outputs" in cell:
-                cell.outputs = []
-            # Remove execution count
-            if "execution_count" in cell:
-                cell.execution_count = None
-            # Remove cell metadata
-            cell.metadata = {}
-        # Remove notebook metadata
-        nb.metadata = {}
-        return nbformat.writes(nb)
-    except Exception as e:
-        typer.echo(f"Warning: Failed to clean notebook content: {e}", err=True)
-        return ""
-
-
 def read_file_content(file_path: Path) -> str:
     """Read and potentially clean file content based on file type."""
     try:
-        content = file_path.read_text(encoding="utf-8")
-        if file_path.suffix == ".ipynb":
-            return clean_notebook_content(content)
-        return content
+        return file_path.read_text(encoding="utf-8")
     except (UnicodeDecodeError, PermissionError, OSError) as e:
         typer.echo(f"Failed to read {file_path}: {e}", err=True)
         return ""
 
 
-def get_ignore_spec() -> pathspec.PathSpec:
-    spec = pathspec.PathSpec.from_lines("gitwildmatch", EXCLUDE_PATTERNS)
-    return spec
+def get_ignore_spec(ignore_file_path: Path = Path(__file__).parent / ".ignore") -> pathspec.PathSpec:
+    try:
+        if ignore_file_path.exists():
+            with ignore_file_path.open("r") as f:
+                patterns = [line.strip() for line in f 
+                          if line.strip() and not line.startswith('#')]
+                return pathspec.PathSpec.from_lines("gitwildmatch", patterns)
+    except Exception as e:
+        typer.echo(f"Warning: Failed to read {ignore_file_path}: {e}", err=True)
+    
+    return pathspec.PathSpec.from_lines("gitwildmatch", [])
 
 
 def collect_files(root_dir: Path) -> list[FileInfo]:

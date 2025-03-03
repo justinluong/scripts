@@ -1,0 +1,29 @@
+# Python-related
+*.ipynb
+__pycache__
+*.py.lock
+.mypy_cache
+.pytest_cache
+.ruff_cache
+
+# Virtual environments
+venv
+.venv
+.env
+
+# Version control
+.git
+
+# Editor and IDE
+.vscode
+
+# Package management
+node_modules
+package-lock.json
+uv.lock
+
+# Build artifacts
+.nx
+
+# to-doc specific
+*-llm.txt
