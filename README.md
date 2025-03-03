@@ -10,7 +10,8 @@ https://docs.astral.sh/uv/getting-started/installation/
 
 2. Add alias to your interactive non-login shell configuration file.
 
-```.zshrc
+e.g. `.zshrc`
+```
 to-doc() {
   uv run /<absolute-path>/scripts/to-doc/to_doc.py "$@"
 }
