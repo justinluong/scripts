@@ -41,6 +41,7 @@ uv.lock
 *.safetensors
 *.jpg
 .coverage.*
+*.log.*
 
 # Mac
 *.DS_Store
