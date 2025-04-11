@@ -5,6 +5,8 @@ __pycache__
 .mypy_cache
 .pytest_cache
 .ruff_cache
+*.coverage
+
 
 # Virtual environments
 venv
@@ -25,5 +27,23 @@ uv.lock
 # Build artifacts
 .nx
 
+# Data files
+*.html
+*.png
+*.json
+*.jsonl
+*.txt
+*.csv
+**/assets/
+*.pkl
+*.log
+*.pem
+*.safetensors
+*.jpg
+.coverage.*
+
+# Mac
+*.DS_Store
+
 # to-doc specific
-*-llm.txt
+*-llms.txt

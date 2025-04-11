@@ -28,7 +28,7 @@ class FileInfo:
 
 def get_default_output_path(root_dir: Path) -> Path:
     """Return default output file path based on the root directory name."""
-    return root_dir / f"{root_dir.resolve().name}-llm.txt"
+    return root_dir / f"{root_dir.resolve().name}-llms.txt"
 
 
 def read_file_content(file_path: Path) -> str:
