@@ -42,6 +42,9 @@ uv.lock
 *.jpg
 .coverage.*
 *.log.*
+*.env
+*.snap
+*env.example
 
 # Mac
 *.DS_Store
